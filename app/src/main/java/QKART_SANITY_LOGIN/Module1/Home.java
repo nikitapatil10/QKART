@@ -53,13 +53,13 @@ public class Home {
             WebElement searchproduct = driver.findElement(By.name("search"));
             searchproduct.clear();
             searchproduct.sendKeys(product);
-            //Thread.sleep(2000);
-            WebDriverWait wait = new WebDriverWait(driver,60);
+            Thread.sleep(2000);
+            WebDriverWait wait = new WebDriverWait(driver,10);
             // searchResults = driver.findElements(By.xpath(
             //     "//div[@class='MuiGrid-root MuiGrid-item MuiGrid-grid-xs-6 MuiGrid-grid-md-3 css-sycj1h']"));
-            Thread.sleep(5000);
+            //Thread.sleep(5000);
             //In debug mode it works fine but when run it fails for noresult found
-           // wait.until(ExpectedConditions.or(ExpectedConditions.elementToBeClickable(By.xpath("//div[@class='MuiGrid-root MuiGrid-item MuiGrid-grid-xs-6 MuiGrid-grid-md-3 css-sycj1h']")),ExpectedConditions.elementToBeClickable(By.xpath("//div[@class='loading MuiBox-root css-0']/h4"))));
+            wait.until(ExpectedConditions.or(ExpectedConditions.elementToBeClickable(By.xpath("//div[@class='MuiGrid-root MuiGrid-item MuiGrid-grid-xs-6 MuiGrid-grid-md-3 css-sycj1h']")),ExpectedConditions.elementToBeClickable(By.xpath("//div[@class='loading MuiBox-root css-0']/h4"))));
            // wait.until(ExpectedConditions.or(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@class='MuiGrid-root MuiGrid-item MuiGrid-grid-xs-6 MuiGrid-grid-md-3 css-sycj1h']")),ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@class='loading MuiBox-root css-0']/h4"))));
             //wait.until(ExpectedConditions.or(ExpectedConditions.urlContains("/login"),ExpectedConditions.visibilityOfElementLocated(By.id("notistack-snackbar"))));
             return true;
@@ -180,7 +180,7 @@ public class Home {
             // Increment or decrement the quantity of the matching product until the current
             // quantity is reached (Note: Keep a look out when then input quantity is 0,
             // here we need to remove the item completely from the cart)
-            WebDriverWait wait = new WebDriverWait(driver,30);
+           
             List<WebElement> productNameElement =
                     driver.findElements(By.xpath("//div[@class='MuiBox-root css-1gjj37g']/div[1]"));
             List<WebElement> currentProductQuantity =
@@ -189,34 +189,37 @@ public class Home {
                     driver.findElements(By.xpath("//div[@class='css-u4p24i']/button[2]"));
             List<WebElement> minusOperation =
                     driver.findElements(By.xpath("//div[@class='css-u4p24i']/button[1]"));
-            //wait.until(ExpectedConditions.numberOfElementsToBe(By.xpath("//div[@data-testid='item-qty']"), quantity));
-
-            for (int i = 0; i < productNameElement.size(); i++) {
+           for(int i = 0; i < productNameElement.size(); i++){
                 String productText = productNameElement.get(i).getText();
-                if (productText.equals(productName)) {
-                    while (true) {
-                        String currentProuctQuantityText = currentProductQuantity.get(i).getText();
-                        int currentQuantity = Integer.parseInt(currentProuctQuantityText);
-                        //wait.until(ExpectedConditions.numberOfElementsToBe(By.className("MuiBox-root css-olyig7"), quantity));
-                        //wait.until(ExpectedConditions.elementToBeClickable(By.className("MuiBox-root css-olyig7")));
-                        if (currentQuantity > quantity) {
-                            minusOperation.get(i).click();
-                            Thread.sleep(2000);
-                            //numberOfElementsToBe(productText, quantity));
-                        } else if (currentQuantity < quantity) {
+                int currentQuantity = Integer.parseInt(currentProductQuantity.get(i).getText());
+                WebDriverWait wait = new WebDriverWait(driver, 5);
+                if(productText.equals(productName)){
+                    while(true){
+                        
+                        if(currentQuantity > quantity){
+                            minusOperation.get(i ).click();
+                            currentQuantity -= 1;
+                            wait.until(ExpectedConditions.textToBePresentInElementLocated(By.xpath("//div[@data-testid='item-qty']"), Integer.toString(currentQuantity)));
+        
+                            if(currentQuantity == 1 && quantity == 0){
+                                break;
+                            }
+                        }
+                        else if(currentQuantity < quantity){
                             plusOperation.get(i).click();
-                            Thread.sleep(2000);
-                        } else if (currentQuantity == quantity) {
+                            currentQuantity += 1;
+                            wait.until(ExpectedConditions.textToBePresentInElementLocated(By.xpath("//div[@data-testid='item-qty']"), Integer.toString(currentQuantity)));
+                        }
+                        else //if(currentQuantity == quantity)
+                        {
+                            //wait.until(ExpectedConditions.textToBePresentInElementValue(By.xpath("//div[@data-testid='item-qty']"), Integer.toString(quantity)));
                             break;
                         }
-
-                        if (currentQuantity == 1 && quantity == 0) {
-                            break;
-                        }
-                    }
+                        
+                    }  
+                    wait.until(ExpectedConditions.textToBePresentInElementLocated(By.xpath("//div[@data-testid='item-qty']"), Integer.toString(quantity)));      
                 }
             }
-
             return false;
         } catch (Exception e) {
             if (quantity == 0)
@@ -225,6 +228,9 @@ public class Home {
             return false;
         }
     }
+            
+
+          
 
     /*
      * Return Boolean denoting if the cart contains items as expected

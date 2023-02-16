@@ -489,7 +489,7 @@ public class QkartSanity {
 
         login.navigateToLoginPage();
         status = login.PerformLogin(lastGeneratedUserName, "abc@123");
-        Thread.sleep(3000);
+        //Thread.sleep(3000);
 
         status = homePage.verifyCartContents(expectedResult);
 
@@ -897,7 +897,7 @@ public class QkartSanity {
 
             System.out.println("");
 
-            // //Execute Test Case 6
+        //     // //Execute Test Case 6
             totalTests += 1;
             status = TestCase06(driver);
             if (status) {
@@ -933,7 +933,7 @@ public class QkartSanity {
 
             System.out.println("");
 
-        // //    // Execute Test Case 10
+        // // //    // Execute Test Case 10
             totalTests += 1;
             status = TestCase10(driver);
             if (status) {
@@ -951,7 +951,7 @@ public class QkartSanity {
 
             System.out.println("");
 
-          //  Execute Test Case 12
+        //   //  Execute Test Case 12
             totalTests += 1;
             status = TestCase12(driver);
             if (status) {

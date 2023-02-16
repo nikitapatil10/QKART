@@ -37,6 +37,8 @@ public class Checkout {
             WebElement addingaddress = driver.findElement(By.xpath("//textarea[@class='MuiOutlinedInput-input MuiInputBase-input MuiInputBase-inputMultiline css-u36398']"));
             addingaddress.sendKeys(addresString);
             driver.findElement(By.xpath("//button[contains(@class,'MuiButtonBase-root  css-177pwqq')]")).click();
+            WebDriverWait wait = new WebDriverWait(driver, 10);
+            wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//div[@class='address-item not-selected MuiBox-root css-0']/div/p")));
             return false;
         } catch (Exception e) {
             System.out.println("Exception occurred while entering address: " + e.getMessage());
@@ -67,6 +69,7 @@ public class Checkout {
                     return true;
                 }
             }
+            
             System.out.println("Unable to find the given address");
             return false;
         } catch (Exception e) {

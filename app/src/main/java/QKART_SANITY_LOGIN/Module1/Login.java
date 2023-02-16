@@ -46,6 +46,7 @@ public class Login {
                 .withTimeout((Duration.ofSeconds(30L)))
                 .pollingEvery(Duration.ofMillis(5))
                 .ignoring(Exception.class);
+        //wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(locator))
         wait.until(ExpectedConditions.invisibilityOfElementLocated(By.xpath("//button[contains(@class,'MuiButtonBase-root button css-177pwqq')]")));
         //Thread.sleep(5000);
         return this.VerifyUserLoggedIn(Username);

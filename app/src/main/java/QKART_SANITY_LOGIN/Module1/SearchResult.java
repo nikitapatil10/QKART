@@ -56,7 +56,7 @@ public class SearchResult {
      */
     public Boolean closeSizeChart(WebDriver driver) {
         try {
-            Thread.sleep(2000);
+           // Thread.sleep(2000);
             Actions action = new Actions(driver);
 
             // Clicking on "ESC" key closes the size chart modal

@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -32,7 +33,7 @@ public class Home {
 
             // SLEEP_STMT_10: Wait for Logout to complete
             // Wait for Logout to Complete
-            Thread.sleep(3000);
+            //Thread.sleep(3000);
 
             return true;
         } catch (Exception e) {
@@ -53,8 +54,8 @@ public class Home {
             WebElement searchproduct = driver.findElement(By.name("search"));
             searchproduct.clear();
             searchproduct.sendKeys(product);
-            Thread.sleep(2000);
-            WebDriverWait wait = new WebDriverWait(driver,10);
+            Thread.sleep(1000);
+            WebDriverWait wait = new WebDriverWait(driver,5);
             // searchResults = driver.findElements(By.xpath(
             //     "//div[@class='MuiGrid-root MuiGrid-item MuiGrid-grid-xs-6 MuiGrid-grid-md-3 css-sycj1h']"));
             //Thread.sleep(5000);
@@ -129,7 +130,7 @@ public class Home {
              */
             driver.navigate().refresh();
             List<WebElement> addproducttocart = driver.findElements(By.xpath("//p[@class='MuiTypography-root MuiTypography-body1 css-yg30e6']"));
-            Thread.sleep(5000);
+            //Thread.sleep(5000);
             List<WebElement> addingproducttocart =
                     driver.findElements(By.xpath("//button[text()='Add to cart']"));
             for (int i = 0; i < addproducttocart.size(); i++) {
@@ -192,7 +193,7 @@ public class Home {
            for(int i = 0; i < productNameElement.size(); i++){
                 String productText = productNameElement.get(i).getText();
                 int currentQuantity = Integer.parseInt(currentProductQuantity.get(i).getText());
-                WebDriverWait wait = new WebDriverWait(driver, 5);
+                WebDriverWait wait = new WebDriverWait(driver, 3);
                 if(productText.equals(productName)){
                     while(true){
                         
@@ -250,6 +251,8 @@ public class Home {
                 String expectedCartElement = expectedcartContentsElements.get(i).getText();
                 if(!expectedCartContentsText.equals(expectedCartElement))
                 {
+                    WebDriverWait wait = new WebDriverWait(driver,5);
+                    wait.until(ExpectedConditions.textToBePresentInElementLocated(By.xpath("//div[@class='MuiBox-root css-1gjj37g']/div[1]"), expectedCartContentsText));
                     return false;
                 }
             }

@@ -37,7 +37,7 @@ public class Checkout {
             WebElement addingaddress = driver.findElement(By.xpath("//textarea[@class='MuiOutlinedInput-input MuiInputBase-input MuiInputBase-inputMultiline css-u36398']"));
             addingaddress.sendKeys(addresString);
             driver.findElement(By.xpath("//button[contains(@class,'MuiButtonBase-root  css-177pwqq')]")).click();
-            WebDriverWait wait = new WebDriverWait(driver, 10);
+            WebDriverWait wait = new WebDriverWait(driver, 3);
             wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//div[@class='address-item not-selected MuiBox-root css-0']/div/p")));
             return false;
         } catch (Exception e) {

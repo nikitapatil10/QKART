@@ -43,7 +43,7 @@ public class Login {
         // SLEEP_STMT_13: Wait for Login to Complete
         // Wait for Login action to complete
         Wait wait = new FluentWait<WebDriver>(driver)
-                .withTimeout((Duration.ofSeconds(30L)))
+                .withTimeout((Duration.ofSeconds(10L)))
                 .pollingEvery(Duration.ofMillis(5))
                 .ignoring(Exception.class);
         //wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(locator))

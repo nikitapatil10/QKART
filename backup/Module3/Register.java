@@ -61,7 +61,7 @@ public class Register {
 
         // Click the register now button
         register_now_button.click();
-        WebDriverWait wait =new WebDriverWait(driver,30);
+        WebDriverWait wait =new WebDriverWait(driver,5);
         // wait.until(ExpectedConditions.urlContains("https://crio-qkart-frontend-qa.vercel.app/login"));
 
         //Wait wait = new FluentWait<WebDriver>(driver).withTimeout(Duration.ofSeconds(30)).pollingEvery(Duration.ofMillis(250)).ignoring(Exception.class);

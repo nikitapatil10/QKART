@@ -87,6 +87,8 @@ public class Checkout {
             // TODO: CRIO_TASK_MODULE_TEST_AUTOMATION - TEST CASE 05: MILESTONE 4
             // Find the "PLACE ORDER" button and click on it
             driver.findElement(By.xpath("//button[contains(@class,'MuiButtonBase-root  css-177pwqq')]")).click();
+            WebDriverWait wait = new WebDriverWait(driver, 3);
+            wait.until(ExpectedConditions.or(ExpectedConditions.urlToBe("https://crio-qkart-frontend-qa.vercel.app/thanks" ),ExpectedConditions.visibilityOf(driver.findElement(By.id("notistack-snackbar")))));
             return false;
 
         } catch (Exception e) {

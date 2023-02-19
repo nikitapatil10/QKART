@@ -6,6 +6,7 @@ package QKART_SANITY_LOGIN.Module1;
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.time.Duration;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
@@ -25,6 +26,8 @@ import org.openqa.selenium.remote.BrowserType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.FluentWait;
+import org.openqa.selenium.support.ui.Wait;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class QkartSanity {
@@ -382,11 +385,12 @@ public class QkartSanity {
         checkoutPage.placeOrder();
         // SLEEP_STMT_04: Wait for place order to succeed and navigate to Thanks page
         // Thread.sleep(3000);
+       
+        // Check if placing order redirected to the Thansk page
+        status = driver.getCurrentUrl().endsWith("/thanks");
         WebDriverWait wait = new WebDriverWait(driver, 5);
         wait.until(
                 ExpectedConditions.urlContains("https://crio-qkart-frontend-qa.vercel.app/thanks"));
-        // Check if placing order redirected to the Thansk page
-        status = driver.getCurrentUrl().endsWith("/thanks");
 
         // Go to the home page
         homePage.navigateToHome();
@@ -456,7 +460,7 @@ public class QkartSanity {
         checkoutPage.selectAddress("Addr line 1 addr Line 2 addr line 3");
 
         checkoutPage.placeOrder();
-        Thread.sleep(2000);
+        //Thread.sleep(2000);
 
         status = driver.getCurrentUrl().endsWith("/thanks");
 
@@ -755,8 +759,13 @@ public class QkartSanity {
         JavascriptExecutor js = (JavascriptExecutor) driver;
         js.executeScript("arguments[0].scrollIntoView();", contactUs);
         contactUs.click();
-        Thread.sleep(2000);
+        //Thread.sleep(2000);
         WebElement contactUsDialogBox = driver.findElement(By.className("card-block"));
+        Wait wait = new FluentWait<WebDriver>(driver)
+                .withTimeout((Duration.ofSeconds(10L)))
+                .pollingEvery(Duration.ofMillis(5))
+                .ignoring(Exception.class);
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("card-block")));
         status = contactUsDialogBox.isDisplayed();
 
         logStatus("Step Success", "Checking the contact us dialog box is open.",
@@ -771,15 +780,10 @@ public class QkartSanity {
                 .click();
         // Thread.sleep(3000);
 
-        if (contactUsDialogBox.isEnabled()) {
-
-            logStatus("End TestCase",
-                    "Test Case 11 : Verify after clicking on the contact us button the contact dialoge box is closed",
-                    status ? "PASS" : "FAIL");
-
-        }
+        wait.until(ExpectedConditions.invisibilityOfElementLocated(By.className("card-block")));
 
         takeScreenshot(driver, "EndTestCase", "TestCase11");
+        logStatus("EndTestCase", "Tes Case 11",status ? "PASS" : "FAIL");
         return status;
     }
 
@@ -831,10 +835,17 @@ public class QkartSanity {
         checkoutPage.selectAddress("Addr line 2 addr Line 3 addr line 3");
 
         checkoutPage.placeOrder();
-        Thread.sleep(3000);
+        //Thread.sleep(3000);
 
         status = driver.getCurrentUrl().endsWith("/thanks");
-        Thread.sleep(3000);
+        Wait wait = new FluentWait<WebDriver>(driver)
+        .withTimeout((Duration.ofSeconds(10L)))
+        .pollingEvery(Duration.ofMillis(5))
+        .ignoring(Exception.class);
+        wait.until(ExpectedConditions.urlContains("/thanks"));
+
+    
+        //Thread.sleep(3000);
 
         List<WebElement> leftSideAdds = driver.findElements(By.xpath(
                 "//div[@class='MuiGrid-root MuiGrid-container MuiGrid-spacing-xs-4 css-92t6i8']/iframe"));
@@ -849,37 +860,31 @@ public class QkartSanity {
         }
         List<WebElement> frameSet = driver.findElements(By.xpath("//iframe[@class='iframe']"));
         //driver.switchTo().frame(0);
-        // List<WebElement> viewCartButton =
-        //         driver.findElements(By.xpath("//div[@class='action_buttons']/button[1]"));
-        // List<WebElement> buyNowButton =
-        //         driver.findElements(By.xpath("//div[@class='action_buttons']/button[2]"));
-        logStatus("Step Success", "Switching from parent window to child window",
-                status ? "PASS" : "FAIL");
+       
+        //logStatus("Step Success", "Switching from parent window to child window",
+            //    status ? "PASS" : "FAIL");
         //System.out.println(frameSet.size());
-        driver.switchTo().parentFrame();
-        driver.switchTo().frame(0);
-        driver.findElement(By.xpath("//div[@class='action_buttons']/button[1]")).click();
-        String url = driver.getCurrentUrl();
+        for(int i = 0;i<frameSet.size();i++)
+        {
+         driver.switchTo().frame(i);
+         driver.findElement(By.xpath("//div[@class='action_buttons']/button[1]")).click();
+         String url = driver.getCurrentUrl();
+         if (url.equals("https://crio-qkart-frontend-qa.vercel.app/")) {
+             // logStatus("Step Success", "Switching from parent window to frame 1", status ? "PASS"
+             // : "FAIL");
+             logStatus("Step Success ", "Checking for View Cart Button is clickable or not : Frame 1",
+                     status ? "PASS" : "FAIL");
+         } else {
+             logStatus("Step Failure", "Checking for View Cart Button is clickable or not : Frame 1",
+                     status ? "PASS" : "FAIL");
+         }
+         driver.navigate().back();
+         driver.switchTo().parentFrame();
+         //driver.navigate().back();
 
-        Thread.sleep(2000);
-        if (url.equals("https://crio-qkart-frontend-qa.vercel.app/")) {
-            // logStatus("Step Success", "Switching from parent window to frame 1", status ? "PASS"
-            // : "FAIL");
-            logStatus("Step Success ", "Checking for View Cart Button is clickable or not : Frame 1",
-                    status ? "PASS" : "FAIL");
-        } else {
-            logStatus("Step Failure", "Checking for View Cart Button is clickable or not : Frame 1",
-                    status ? "PASS" : "FAIL");
-        }
-
-        driver.navigate().back();
-        driver.switchTo().parentFrame();
-        driver.switchTo().frame(0);
-        Thread.sleep(2000);
+        driver.switchTo().frame(i);
         driver.findElement(By.xpath("//div[@class='action_buttons']/button[2]")).click();
         String url1 = driver.getCurrentUrl();
-
-        Thread.sleep(2000);
         if (url1.equals("https://crio-qkart-frontend-qa.vercel.app/checkout"))
         {
             logStatus("Step Success", "Checking for Buy Now Button is clickable or not : Frame 1",
@@ -888,42 +893,9 @@ public class QkartSanity {
             logStatus("Step Failure", "Checking for Buy Now Button is clickable or not : Frame 1",
                     status ? "PASS" : "FAIL");
         }
-        driver.navigate().back();
-        // System.out.println(driver.switchTo().frame(0));
-        driver.switchTo().parentFrame();
-        driver.switchTo().frame(1);
-        Thread.sleep(2000);
-        driver.findElement(By.xpath("//div[@class='action_buttons']/button[1]")).click();
-        String url2 = driver.getCurrentUrl();
-
-        Thread.sleep(2000);
-        if (url2.equals("https://crio-qkart-frontend-qa.vercel.app/")) 
-        {
-            logStatus("Step Success", "Checking for View Cart Button is clickable or not : Frame 2",
-                    status ? "PASS" : "FAIL");
-        } else {
-            logStatus("Step Failure", "Checking for View Cart Button is clickable or not : Frame 2",
-                    status ? "PASS" : "FAIL");
+       driver.switchTo().parentFrame();
+       driver.navigate().back();
         }
-
-        driver.navigate().back();
-        driver.switchTo().parentFrame();
-        driver.switchTo().frame(1);
-        Thread.sleep(2000);
-        driver.findElement(By.xpath("//div[@class='action_buttons']/button[2]")).click();
-        String url3 = driver.getCurrentUrl();
-
-        Thread.sleep(2000);
-        if (url3.equals("https://crio-qkart-frontend-qa.vercel.app/checkout")) 
-        {
-            logStatus("Step Success", "Checking for Buy Now Button is clickable or not : Frame 2",
-                    status ? "PASS" : "FAIL");
-        } else {
-            logStatus("Step Failure", "Checking for Buy Now Button is clickable or not : Frame 2",
-                    status ? "PASS" : "FAIL");
-        }
-        driver.navigate().back();
-        driver.switchTo().parentFrame();
         logStatus("End TestCase", "Test Case 12: Ensuring three adds are present on thanks page : ",
                 status ? "PASS" : "FAIL");
         takeScreenshot(driver, "EndTestCase", "TestCase12");
@@ -1029,7 +1001,7 @@ public class QkartSanity {
 
             System.out.println("");
 
-            // // Execute Test Case 11
+            // Execute Test Case 11
             totalTests += 1;
             status = TestCase11(driver);
             if (status) {

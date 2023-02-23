@@ -138,7 +138,7 @@ public class Home {
                 String actualProductText = addproducttocartElement.getText();
                 if (actualProductText.equals(productName)) {
                     WebElement addingProductToCartElement = addingproducttocart.get(i);
-                    addingProductToCartElement.click();
+                    addingProductToCartElement.click();         
                     return true;
                 }
             }

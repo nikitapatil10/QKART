@@ -50,12 +50,19 @@ public class Home {
             WebElement searchBox = driver.findElement(By.xpath("//input[@name='search'][1]"));
             searchBox.clear();
             searchBox.sendKeys(product);
-
-            WebDriverWait wait = new WebDriverWait(driver, 30);
-            wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.xpath(String
+            Thread.sleep(2000);
+            WebDriverWait wait = new WebDriverWait(driver, 5);
+            try{
+                 wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.xpath(String
                     .format("//div[@class='MuiCardContent-root css-1qw96cp'][1]/p[contains(text(),'%s')]", product))));
-            Thread.sleep(3000);
-            return true;
+            }
+            catch(Exception e)
+            {
+                return false;
+            }
+            // Thread.sleep(3000);
+             //wait.until(ExpectedConditions.or(ExpectedConditions.elementToBeClickable(By.xpath("//div[@class='MuiGrid-root MuiGrid-item MuiGrid-grid-xs-6 MuiGrid-grid-md-3 css-sycj1h']")),ExpectedConditions.elementToBeClickable(By.xpath("//div[@class='loading MuiBox-root css-0']/h4"))));
+             return true;
         } catch (Exception e) {
             System.out.println("Error while searching for a product: " + e.getMessage());
             return false;
@@ -84,7 +91,7 @@ public class Home {
      * Returns Boolean based on if the "No products found" text is displayed
      */
     public Boolean isNoResultFound() {
-        Boolean status = false;
+       Boolean status = false;
         try {
             status = driver.findElementByXPath("//h4[text()=' No products found ']").isDisplayed();
             return status;
@@ -113,7 +120,7 @@ public class Home {
 
                     WebDriverWait wait = new WebDriverWait(driver, 30);
                     wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
-                            String.format("//*[@class='MuiBox-root css-1gjj37g']/div[1][text()='%s']", productName))));
+                            String.format("//*[@class='MuiBox-root css-1gjj37g']/div[1][contains(text(),'%s')]", productName))));
                     return true;
                 }
             }

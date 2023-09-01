@@ -37,7 +37,7 @@ public class Checkout {
             WebElement AddressBox = driver.findElement(By.className("MuiOutlinedInput-input"));
             AddressBox.clear();
             AddressBox.sendKeys(addresString);
-
+            
             List<WebElement> buttons = driver.findElements(By.className("css-177pwqq"));
             for (WebElement button : buttons) {
                 if (button.getText().equals("ADD")) {

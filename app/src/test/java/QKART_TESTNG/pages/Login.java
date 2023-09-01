@@ -27,7 +27,7 @@ public class Login {
     public Boolean PerformLogin(String Username, String Password) throws InterruptedException {
         // Find the Username Text Box
         WebElement username_txt_box = this.driver.findElement(By.id("username"));
-
+        
         // Enter the username
         username_txt_box.sendKeys(Username);
 
